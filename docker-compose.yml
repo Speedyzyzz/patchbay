@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  patchbay-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8002:8002"
+    environment:
+      - WORKSPACE_ROOT=/data/workspace
+    volumes:
+      - patchbay-workspace:/data/workspace
+
+  patchbay-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8002
+    depends_on:
+      - patchbay-backend
+
+volumes:
+  patchbay-workspace:
